@@ -7,6 +7,7 @@ import (
 
 	"notification-center/center"
 	"notification-center/handler"
+	"notification-center/hub/chat"
 
 	"github.com/gorilla/websocket"
 )
@@ -22,6 +23,10 @@ func main() {
 	}
 
 	nc := &center.NotificationCenter{}
+
+	nc.RegisterHubType("Chat", func() center.Hub {
+		return &chat.ChatHub{}
+	})
 
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		conn, err := upgrader.Upgrade(w, r, nil)
